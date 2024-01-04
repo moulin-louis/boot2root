@@ -101,6 +101,8 @@ We use a python script called `pcap.py` to concatenate all the file and run the 
     $> ./a.out
         ...
         password: Iheartpwnage
+        Now SHA-256 it and submit
+        ...
 
 so the result is :
 
