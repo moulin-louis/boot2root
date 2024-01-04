@@ -42,7 +42,7 @@ We assume `lmezard` is `stupid` and tried to connect with his password as his us
 Indeed we can login in the forum with this information:
 
     username: lmezard
-    password: !q]Ej?5K5cyAJ
+    password: !q\]Ej?*5K5cy*AJ
 
 ## Step 4
 
@@ -51,7 +51,7 @@ In the forum profile of `lmezard` we get an email.
 Lets try to connect through `/webmail` with :
     
     email: laurie@borntosec.net
-    password: !q]Ej?5K5cyAJ
+    password: !q\]Ej?*5K5cy*AJ
 
 Gotem ! We have acces to his mails.
 
