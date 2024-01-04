@@ -18,8 +18,10 @@ We will use nmap to scan the range of ip and find some machine on it:
 
 There it is we have our ip address: `192.168.56.101` !
 ## Step 2
-Now that we have the ip address of our VM we can scan it using dirb
+Now that we have the ip address of our VM we can scan it using dirb inside a kali container:
 
+    $> docker run -it kalilinux/kali-rolling:latest
+    $> apt update && apt install -y dirb
     $> dirp https://192.156.56.101
     ...
     https://192.156.56.101/forum
