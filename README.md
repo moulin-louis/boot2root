@@ -4,7 +4,7 @@
 -  [@moulin-louis](https://github.com/moulin-louis)
 
 ## Description: 
-Security Challenge.In a group, search for various means to pass root on the ISO given to you.
+Security Challenge. In a group, search for various means to pass root on the ISO given to you.
 
 ## Note:
 - TBD
