@@ -91,7 +91,7 @@ This file provide all the required information to connect to lmezard in the VM (
 
 ## Step 7
 
-We find a README that say that the result password shall be hash with sha256 to access `zaz` user and a zip archive on the `lmezard`'s home.
+We find a README that say that the result password shall used to access with ssh `laurie` user and a zip archive on the `lmezard`'s home.
 
 Inside there is a lot of pcap file with some C code in it and a file number information.
 We use a python script called `pcap.py` to concatenate all the file and run the C program.
@@ -106,7 +106,7 @@ We use a python script called `pcap.py` to concatenate all the file and run the 
 
 so the result is :
 
-    username: zaz
+    username: laurie
     password: 330b845f32185747e4f8ca15d40ca59796035c89ea809fb5d30f4da83ecf45a4
 
 ## Step 8
